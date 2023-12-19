@@ -16,3 +16,8 @@
 - run `npm install`
 - run `npm start`
 - open http://localhost:4200
+
+
+## Test the service
+- cd to service
+- run `dotnet test`
