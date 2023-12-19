@@ -1,0 +1,43 @@
+<ng-container *ngIf="customerWithDetails; else list">
+  <div>
+    <button (click)="goBack()">go back</button>
+    <h2>Customer Details</h2>
+    <p>
+      Name: {{ customerWithDetails.name }} {{ customerWithDetails.surname }}
+    </p>
+    <p>Balance: {{ customerWithDetails.balance }}</p>
+    <h3>Transactions</h3>
+    <ul>
+      <li *ngFor="let transaction of customerWithDetails.transactions">
+        <p>Sender ID: {{ transaction.senderCustomerId }}</p>
+        <p>Recipient ID: {{ transaction.recipientCustomerId }}</p>
+        <p>Amount: {{ transaction.amount }}</p>
+      </li>
+    </ul>
+  </div>
+</ng-container>
+
+<ng-template #list>
+  <ng-container *ngIf="customerEntities$ | async as customerEntities">
+    <div *ngFor="let customer of customerEntities">
+      <h3>{{ customer.name }} {{ customer.surname }}</h3>
+      <p>ID: {{ customer.id }}</p>
+      <p>Customer ID: {{ customer.customerId }}</p>
+
+      <ng-container *ngIf="customer.currentAccount">
+        <p>Current Account ID: {{ customer.currentAccount?.id }}</p>
+        <p>Balance: {{ customer.currentAccount?.balance }}</p>
+      </ng-container>
+
+      <ng-container *ngIf="!customer.currentAccount">
+        <input #input type="number" value="0" />
+        <button (click)="openCurrentAccount(customer.customerId, input.value)">
+          open current account
+        </button>
+      </ng-container>
+
+      <button (click)="showDetails(customer.customerId)">Show Details</button>
+      <hr />
+    </div>
+  </ng-container>
+</ng-template>
