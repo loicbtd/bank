@@ -1,0 +1,23 @@
+outputs:
+  PREVIOUS_VERSION:
+    value: ${{ steps.define_version.outputs.PREVIOUS_VERSION }}
+  CURRENT_VERSION:
+    value: ${{ steps.define_version.outputs.CURRENT_VERSION }}
+
+runs:
+  using: composite
+  steps:
+    - name: checkout the repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: define the previous version
+      id: define_version
+      shell: bash
+      run: |
+        previousVersion=$(git for-each-ref --sort=taggerdate --format '%(refname:short) %(taggerdate)' refs/tags | sort -V | sed -n 'x;$p' | sed 's/^\([0-9]*\.[0-9]*\.[0-9]*\).*/\1/')
+        echo "PREVIOUS_VERSION=$previousVersion" >> $GITHUB_OUTPUT
+
+        currentVersion=$(git for-each-ref --sort=taggerdate --format '%(refname:short) %(taggerdate)' refs/tags | sort -V | sed '$!d' | sed 's/^\([0-9]*\.[0-9]*\.[0-9]*\).*/\1/')
+        echo "CURRENT_VERSION=$currentVersion" >> $GITHUB_OUTPUT

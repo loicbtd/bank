@@ -1,0 +1,40 @@
+inputs:
+  APPLICATION_VERSION:
+    required: true
+  GITHUB_TOKEN:
+    required: true
+  GOOGLE_FIREBASE_CHANNEL:
+    required: true
+  GOOGLE_FIREBASE_PROJECT_ID:
+    required: true
+  GOOGLE_FIREBASE_SERVICE_ACCOUNT:
+    required: true
+  NODEJS_VERSION:
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: checkout the repository
+      uses: actions/checkout@v4
+
+    - name: install node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ inputs.NODEJS_VERSION }}
+
+    - name: install the dependencies
+      shell: bash
+      run: npm install
+
+    - name: build the application
+      shell: bash
+      run: npm exec nx run application:build:production
+
+    - name: publish the application
+      uses: FirebaseExtended/action-hosting-deploy@v0
+      with:
+        channelId: ${{ inputs.GOOGLE_FIREBASE_CHANNEL }}
+        firebaseServiceAccount: ${{ inputs.GOOGLE_FIREBASE_SERVICE_ACCOUNT }}
+        projectId: ${{ inputs.GOOGLE_FIREBASE_PROJECT_ID }}
+        repoToken: ${{ inputs.GITHUB_TOKEN }}
