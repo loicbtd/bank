@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/retrieve_version
         id: retrieve_version
-      - uses: ./.github/actions/deploy_application_web
+      - uses: ./.github/actions/deploy_application
         with:
           APPLICATION_VERSION: ${{ steps.retrieve_version.outputs.CURRENT_VERSION }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
