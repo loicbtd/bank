@@ -34,9 +34,9 @@ runs:
       working-directory: application
 
     - name: publish the application
-      working-directory: application
       uses: FirebaseExtended/action-hosting-deploy@v0
       with:
+        entrypoint: application
         channelId: ${{ inputs.GOOGLE_FIREBASE_CHANNEL }}
         firebaseServiceAccount: ${{ inputs.GOOGLE_FIREBASE_SERVICE_ACCOUNT }}
         projectId: ${{ inputs.GOOGLE_FIREBASE_PROJECT_ID }}
