@@ -25,13 +25,11 @@ runs:
 
     - name: install the dependencies
       shell: bash
-      run: npm install
-      working-directory: application
+      run: cd application; npm install
 
     - name: build the application
       shell: bash
-      run: npm exec nx run application:build:production
-      working-directory: application
+      run: cd application; npm exec nx run application:build:production
 
     - name: publish the application
       uses: FirebaseExtended/action-hosting-deploy@v0
