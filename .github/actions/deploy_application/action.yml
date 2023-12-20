@@ -23,6 +23,10 @@ runs:
       with:
         node-version: ${{ inputs.NODEJS_VERSION }}
 
+    - name: cd
+      shell: bash
+      run: cd application
+
     - name: install the dependencies
       shell: bash
       run: npm install
