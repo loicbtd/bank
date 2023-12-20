@@ -1,6 +1,5 @@
 {
   "hosting": {
-    "target": "application",
     "public": "dist/application",
     "ignore": ["**/.*"],
     "headers": [
