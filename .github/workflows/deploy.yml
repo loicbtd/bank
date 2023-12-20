@@ -1,0 +1,48 @@
+name: deploy
+
+on:
+  push:
+    tags:
+      - '[0-9].[0-9]+.[0-9]+'
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy_application:
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/retrieve_version
+        id: retrieve_version
+      - uses: ./.github/actions/deploy_application_web
+        with:
+          APPLICATION_VERSION: ${{ steps.retrieve_version.outputs.CURRENT_VERSION }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GOOGLE_FIREBASE_CHANNEL: live
+          GOOGLE_FIREBASE_PROJECT_ID: bank-loicbertrand-net
+          GOOGLE_FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_BANK_LOICBERTRAND_NET }}
+          NODEJS_VERSION: ${{ vars.COMMON_NODEJS_VERSION }}
+
+  deploy_service:
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/retrieve_version
+        id: retrieve_version
+      - uses: ./.github/actions/deploy_service
+        with:
+          APPLICATION_VERSION: ${{ steps.retrieve_version.outputs.CURRENT_VERSION }}
+          CONTAINER_IMAGE_NAME: ${{ vars.PRODUCTION_SERVICE_CONTAINER_IMAGE_NAME }}
+          CONTAINER_REGISTRY_REGION: ${{ vars.COMMON_CONTAINER_REGISTRY_REGION }}
+          CONTAINER_REGISTRY_URL: ${{ vars.COMMON_CONTAINER_REGISTRY_URL }}
+          DOCKERFILE_PATH: service/Applications.Service/Dockerfile
+          GOOGLE_PROJECT_ID: ${{ vars.COMMON_GOOGLE_PROJECT_ID }}
+          GOOGLE_SERVICE_ACCOUNT_EMAIL: ${{ vars.COMMON_GOOGLE_SERVICE_ACCOUNT_EMAIL }}
