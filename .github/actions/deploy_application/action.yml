@@ -32,7 +32,7 @@ runs:
       run: npm exec nx run application:build:production
 
     - name: publish the application
-      uses: FirebaseExtended/action-hosting-deploy@v3
+      uses: FirebaseExtended/action-hosting-deploy@v0
       with:
         channelId: ${{ inputs.GOOGLE_FIREBASE_CHANNEL }}
         firebaseServiceAccount: ${{ inputs.GOOGLE_FIREBASE_SERVICE_ACCOUNT }}
