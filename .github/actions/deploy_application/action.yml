@@ -23,19 +23,18 @@ runs:
       with:
         node-version: ${{ inputs.NODEJS_VERSION }}
 
-    - name: cd
-      shell: bash
-      run: cd application
-
     - name: install the dependencies
       shell: bash
       run: npm install
+      working-directory: application
 
     - name: build the application
       shell: bash
       run: npm exec nx run application:build:production
+      working-directory: application
 
     - name: publish the application
+      working-directory: application
       uses: FirebaseExtended/action-hosting-deploy@v0
       with:
         channelId: ${{ inputs.GOOGLE_FIREBASE_CHANNEL }}
