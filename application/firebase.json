@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/application",
+    "public": "dist/application/browser",
     "ignore": ["**/.*"],
     "headers": [
       {
